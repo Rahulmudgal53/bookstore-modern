@@ -54,6 +54,12 @@ The app is available on port 4000 and serves both the built UI and API. PostgreS
 
 Set `TRUST_PROXY=true` only when the app is behind a trusted proxy that sets forwarded headers. Keep `.env` private. Payment mode is locked to `test`; changing `PAYMENT_MODE` to another value intentionally prevents the API from starting until a real payment integration is implemented.
 
+## Render deployment
+
+The root `render.yaml` defines a **Free** Node web service only; it does not create a database or add credentials. In the Render Dashboard, create a PostgreSQL database first, review its plan, region, storage, backup, and retention terms, then create a Blueprint for this repository. Use a database in the same region and provide its internal connection string as `DATABASE_URL` when prompted. The Blueprint generates `JWT_SECRET` in Render and prompts for the initial admin email and password; use a unique password of at least 14 characters. No secret values belong in this repository.
+
+The app defaults to `DATABASE_SSL=false` for Render's internal database connection. If you use an external provider, configure SSL as that provider requires. Verify `CORS_ORIGINS` matches the web service's actual HTTPS URL in the dashboard, especially if Render assigns a different hostname. The Free web service spins down when idle and can take about a minute to start again; it is intended for evaluation, not production. Render's Free Postgres databases expire after 30 days and are deleted after a further 14-day grace period, so do not use one for data you need to retain. Choose any paid capacity yourself in the dashboard only after reviewing its cost and data-retention terms.
+
 ## Role capabilities
 
 - **Customer:** browse/search/filter books; manage a persistent wishlist and profile; write or update reviews; place test orders; view order history and cancel eligible orders.
