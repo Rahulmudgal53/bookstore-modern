@@ -1,11 +1,11 @@
 :root {
-  font-family: Inter, 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #e2e8f0;
+  color: #26332d;
   background:
-    radial-gradient(circle at top, rgba(59, 130, 246, 0.2), transparent 30%),
-    linear-gradient(180deg, #020817 0%, #0f172a 100%);
+    radial-gradient(ellipse at 50% -20%, rgba(207, 218, 199, 0.62), transparent 42%),
+    #f4f1e9;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

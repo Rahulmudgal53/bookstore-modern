@@ -95,7 +95,6 @@ function App() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('featured')
-  const [liveReaders, setLiveReaders] = useState(1486)
   const [wishlist, setWishlist] = useState(() => {
     try {
       const saved = localStorage.getItem('bookstore-wishlist')
@@ -105,7 +104,6 @@ function App() {
     }
   })
   const [selectedBook, setSelectedBook] = useState(fallbackBooks[1])
-  const [subscribed, setSubscribed] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isAuthOpen, setIsAuthOpen] = useState(false)
   const [authMode, setAuthMode] = useState('login')
@@ -195,14 +193,6 @@ function App() {
     }
     return data
   }, [token])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveReaders((current) => current + Math.floor(Math.random() * 11) - 3)
-    }, 2600)
-
-    return () => clearInterval(interval)
-  }, [])
 
   useEffect(() => {
     fetch('/api/books')
@@ -409,11 +399,6 @@ function App() {
         )
         .filter((item) => item.quantity > 0),
     )
-  }
-
-  const handleSubscribe = (event) => {
-    event.preventDefault()
-    setSubscribed(true)
   }
 
   const refreshBooks = async () => {
@@ -741,29 +726,29 @@ function App() {
               >
                 Explore library
               </button>
-              <button type="button" className="secondary-button" onClick={() => setIsCartOpen(true)}>
-                Member pricing
+              <button type="button" className="secondary-button" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
+                Our point of view
               </button>
             </div>
 
             <div className="stats-grid">
               <div>
-                <strong>24k+</strong>
-                <span>books listed</span>
+                <strong>{books.length}</strong>
+                <span>curated titles</span>
               </div>
               <div>
-                <strong>4.9/5</strong>
-                <span>reader rating</span>
+                <strong>{availableCategories.length - 1}</strong>
+                <span>genres to explore</span>
               </div>
               <div>
-                <strong>12 hr</strong>
-                <span>average delivery</span>
+                <strong>Test mode</strong>
+                <span>no payment collected</span>
               </div>
             </div>
           </div>
 
           <div className="hero-visual">
-            <div className="floating-badge top-badge">+39% this week</div>
+            <div className="floating-badge top-badge">A thoughtful place to start</div>
 
             <div className="book-preview" style={{ '--cover-gradient': selectedBook.coverGradient }}>
               <div className="book-cover">
@@ -782,15 +767,15 @@ function App() {
               </div>
             </div>
 
-            <div className="floating-badge bottom-badge">Live now: {liveReaders.toLocaleString()} readers</div>
+            <div className="floating-badge bottom-badge">Selected for curious minds</div>
           </div>
         </section>
 
         <section id="catalog" className="catalog-section">
           <div className="section-header">
             <div>
-              <span className="eyebrow dark">This week’s picks</span>
-              <h3>Popular reads</h3>
+              <span className="eyebrow dark">The reading room</span>
+              <h3>A few good places to begin</h3>
             </div>
 
             <div className="toolbar">
@@ -861,7 +846,7 @@ function App() {
 
                   <div className="card-content">
                     <div className="meta-row">
-                      <span className="badge">{book.badge}</span>
+                      <span className="badge">{book.category}</span>
                       <span>⭐ {book.rating}</span>
                     </div>
 
@@ -924,51 +909,51 @@ function App() {
 
         <section id="features" className="features-section">
           <div className="feature-heading">
-            <span className="eyebrow dark">Why readers stay</span>
-            <h3>Built for serious browsing</h3>
+            <span className="eyebrow dark">A considered collection</span>
+            <h3>A calmer way to find your next read</h3>
           </div>
 
           <div className="feature-grid">
             <div className="feature-card">
               <div className="feature-icon">01</div>
-              <h4>Smart discovery</h4>
-              <p>Advanced curation based on reading habits, genres, and high-converting picks.</p>
+              <h4>Browse your way</h4>
+              <p>Search by title or author, then narrow the shelf by genre and rating.</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">02</div>
-              <h4>Instant updates</h4>
-              <p>Live reading data, trending titles, and fresh release alerts without the clutter.</p>
+              <h4>Details that matter</h4>
+              <p>See descriptions, prices, availability, and reader reviews before you choose.</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">03</div>
-              <h4>Trusted quality</h4>
-              <p>Curated selections from experts, authors, and communities who actually read.</p>
+              <h4>Your own reading list</h4>
+              <p>Save titles for later, keep your picks in one place, and come back when you are ready.</p>
             </div>
           </div>
         </section>
 
         <section id="community" className="community-section">
           <div className="community-copy">
-            <span className="eyebrow dark">Readers’ community</span>
-            <h3>What people are reading right now</h3>
+            <span className="eyebrow dark">A little more intention</span>
+            <h3>Less scrolling. More getting lost in a good book.</h3>
             <p>
-              From practical guides to unforgettable fiction, our community keeps the shelves
-              moving with thoughtful reviews and must-read recommendations.
+              Find a small, considered shelf of stories and ideas. Browse at your own pace,
+              save what speaks to you, and share an honest review when you are ready.
             </p>
           </div>
 
           <div className="insight-panel">
             <div>
-              <small>Weekly growth</small>
-              <strong>+28%</strong>
+              <small>Start with</small>
+              <strong>Curiosity</strong>
             </div>
             <div>
-              <small>Members saved</small>
-              <strong>8.4k</strong>
+              <small>Checkout</small>
+              <strong>Test only</strong>
             </div>
             <div>
-              <small>Curators online</small>
-              <strong>142</strong>
+              <small>Made for</small>
+              <strong>Readers</strong>
             </div>
           </div>
         </section>
@@ -1131,16 +1116,14 @@ function App() {
 
         <section id="journal" className="newsletter-section">
           <div>
-            <span className="eyebrow dark">Weekly brief</span>
-            <h3>Fresh recommendations in your inbox.</h3>
+            <span className="eyebrow dark">Make room for a new favorite</span>
+            <h3>Your next great read is on the shelf.</h3>
+            <p>Take a look around. You might find exactly the story you needed.</p>
           </div>
 
-          <form onSubmit={handleSubscribe} className="newsletter-form">
-            <input type="email" placeholder="Enter your email" aria-label="Email address" />
-            <button type="submit">Get the brief</button>
-          </form>
-
-          {subscribed && <p className="success-text">You’re on the list — expect your first recap soon.</p>}
+          <button type="button" className="primary-button" onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })}>
+            Browse the collection
+          </button>
         </section>
 
         {user && activePage === 'orders' && !isManager && (
