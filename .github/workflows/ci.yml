@@ -10,6 +10,25 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: bookstore
+          POSTGRES_USER: bookstore
+          POSTGRES_PASSWORD: bookstore_test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U bookstore -d bookstore"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://bookstore:bookstore_test_password@localhost:5432/bookstore
+      DATABASE_SSL: "false"
+      JWT_SECRET: ci-only-random-test-secret-not-for-deployment-123456
+      PAYMENT_MODE: test
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -29,9 +48,16 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Set up test database
+        run: npm run db:setup
+
+      - name: Test API behavior
+        run: npm test
+
       - name: Check server scripts
         run: |
           node --check server/server.js
           node --check server/db.js
           node --check server/setup-db.js
           node --check server/import-json-store.js
+          node --check server/server.test.js

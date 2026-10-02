@@ -74,3 +74,7 @@ The app defaults to `DATABASE_SSL=false` for Render's internal database connecti
 - Admin only: `GET /api/admin/stats`, `GET /api/admin/users`, `PATCH /api/admin/users/:userId`
 
 Run `npm run build` and `npm run lint` for frontend/build checks. `GET /api/health` also verifies the database connection.
+
+## API tests
+
+Run `npm run db:setup` against a dedicated PostgreSQL database, then `npm test`. The integration tests create and clean up uniquely named test users, books, and orders; do not point them at production data.

@@ -11,6 +11,7 @@
     "db:import-json": "node server/import-json-store.js",
     "start": "node server/server.js",
     "prestart": "npm run db:setup",
+    "test": "node --test",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"

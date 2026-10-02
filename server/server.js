@@ -563,18 +563,22 @@ app.use((error, _req, res, _next) => {
   return res.status(500).json({ message: 'An unexpected server error occurred.' })
 })
 
-const server = app.listen(port, () => {
-  console.log(`Bookstore API listening on port ${port} (payments: test mode)`)
-})
-
-const shutdown = async (signal) => {
-  console.log(`${signal} received; shutting down gracefully.`)
-  server.close(async () => {
-    await pool.end()
-    process.exit(0)
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const server = app.listen(port, () => {
+    console.log(`Bookstore API listening on port ${port} (payments: test mode)`)
   })
-  setTimeout(() => process.exit(1), 10_000).unref()
+
+  const shutdown = (signal) => {
+    console.log(`${signal} received; shutting down gracefully.`)
+    server.close(async () => {
+      await pool.end()
+      process.exit(0)
+    })
+    setTimeout(() => process.exit(1), 10_000).unref()
+  }
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'))
+  process.on('SIGINT', () => shutdown('SIGINT'))
 }
 
-process.on('SIGTERM', () => shutdown('SIGTERM'))
-process.on('SIGINT', () => shutdown('SIGINT'))
+export default app
